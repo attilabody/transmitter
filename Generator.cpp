@@ -24,18 +24,26 @@ void Generator::Init()
 	TCCR1A = 0;
     TCCR1B = _BV(CS11); // normal mode; F_CPU / 8 => 16MHz / (8 * 65536) = 30.517578125 Hz => 32.768 msec (tick: 500ns)
     TIMSK1 |= _BV(TOIE1); // enable overflow interrupt
-    OCR1A = TCNT1 + 1000;	//50ms
+	TCNT1 = 0;
+    OCR1A = 1000;	//50ms
     TIMSK1 |= _BV(OCIE1A);
 }
 
-
-
-ISR(TIMER1_OVF_vect)
+void Generator::TimerCompare()
 {
 	OCR1A += 1000;
 	REMOTE_PORT ^= _BV(REMOTE_BIT);
 }
 
+void Generator::TimerOverflow()
+{}
+
+ISR(TIMER1_OVF_vect)
+{
+	Generator::Instance().TimerOverflow();
+}
+
 ISR(TIMER1_COMPA_vect)
 {
+	Generator::Instance().TimerCompare();
 }
