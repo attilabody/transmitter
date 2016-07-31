@@ -8,6 +8,7 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 //#include <avr/io.h>
+//#define F_CPU 16000000
 
 #define REMOTE_DDR_PORT DDRC
 #define REMOTE_DDR_BIT	DDC0
